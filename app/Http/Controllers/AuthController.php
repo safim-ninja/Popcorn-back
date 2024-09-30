@@ -64,14 +64,8 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
-        return($request->user());
-        $data = $request->validate([
-            'email' => 'required|string|email'
-        ]);
-        $user = User::where('email', $data['email'])->first();
-
 //        $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
-        $user->currentAccessToken()->delete();
+        $request->user()->currentAccessToken()->delete();
         return response()->json([
             'message' => 'Logged out',
             'user' => null,
@@ -80,6 +74,7 @@ class AuthController extends Controller
     }
     public function getToken(Request $request) {
         // dd('$user');
+        return $request->user()->currentAccessToken();
         $user = User::where('email', $request->email)->first();
         dd($user->currentAccessToken());
     }
